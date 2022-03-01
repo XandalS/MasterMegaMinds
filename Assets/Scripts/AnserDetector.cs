@@ -8,10 +8,14 @@ public class AnserDetector : MonoBehaviour
 {
     public GameObject[] CurrentRow;
     public GameObject[] AnswerKey;
+    public GameObject[] currentRow;
+    public GameObject[] answerKey;
+    public GameObject[] pins;
+    public GameObject hintGrid;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -20,13 +24,13 @@ public class AnserDetector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Evaluate();
-        }   
+        }
     }
 
     private void Evaluate()
     {
         Material[] answerMats = new Material[AnswerKey.Length];
-        for ( int i =0; i< AnswerKey.Length; i++)
+        for (int i = 0; i < AnswerKey.Length; i++)
         {
             Material temp = AnswerKey[i].GetComponent<MeshRenderer>().material;
             answerMats[i] = temp;
@@ -51,6 +55,7 @@ public class AnserDetector : MonoBehaviour
             {
                 answers[i] = 1;
                 Debug.Log($"{currentRowMats[i]} is the same in both.");
+                InstantiateCorrectPin(hintGrid.transform.GetChild(i).transform);
             }
             else
             {
@@ -61,6 +66,7 @@ public class AnserDetector : MonoBehaviour
                 if (Array.Find(answerMats, m => m.color == currentRowMats[i].color))
                 {
                     answers[i] = 0;
+                    InstantiateWrongPin(hintGrid.transform.GetChild(i).transform);
                 }
                 else
                 {
@@ -83,6 +89,18 @@ public class AnserDetector : MonoBehaviour
                 Debug.Log("EEeh X ");
             }
             Debug.Log($"At index:{i}, nums is {currentRowMats[i]}, and nums 2 is {answerMats[i]}.");
+
         }
+    }
+    void InstantiateCorrectPin(Transform transform)
+    {
+        GameObject pin = Instantiate(pins[0]);
+        pin.transform.position = transform.position;
+    }
+    void InstantiateWrongPin(Transform transform)
+    {
+        GameObject pin = Instantiate(pins[1]);
+        pin.transform.position = transform.position;
+
     }
 }
